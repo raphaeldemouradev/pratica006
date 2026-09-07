@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prática 006 - Feed</title>
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+
+  <!-- Containers dos Componentes -->
+  <div id="navbar-top-container"></div>
+  <div id="login-modal-container"></div>
+  <div id="register-modal-container"></div>
+  <div id="post-modal-container"></div>
+
+  <!-- Conteúdo Principal: FEED -->
+  <main class="main-container">
+    <div id="posts-container">
+      
+      <!-- Estado Padrão (Sem publicações) -->
+      <div id="empty-state" class="empty-state">
+        <div class="empty-icon">📭</div>
+        <h1 class="empty-title">Nenhuma postagem ainda</h1>
+        <p class="empty-subtitle">Fique atento! Novas atualizações e publicações aparecerão aqui em breve.</p>
+      </div>
+
+    </div>
+  </main>
+
+  <div id="navbar-bottom-container"></div>
+
+  <!-- Ponto de entrada do JavaScript Modular -->
+  <script type="module" src="./js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prática 006 - Meu Perfil</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/perfil.css">
+</head>
+<body style="padding: 0px;">
+  <div class="profile-card">
+    
+    <!-- 1. Barra Superior -->
+    <div class="profile-top-bar">
+      <a href="/" class="top-bar-btn">
+        ← Voltar para o Feed
+      </a>
+      <button id="logoutBtn" class="top-bar-btn logout-btn">
+        Sair da conta
+      </button>
+    </div>
+
+    <!-- 2. Banner com Foto -->
+    <div class="profile-banner">
+      <div class="banner-avatar-container">
+        <img src="https://via.placeholder.com/90" alt="Foto de Perfil" id="avatarImg" />
+      </div>
+    </div>
+
+    <!-- 3. Visualização dos Dados (Nome e E-mail) -->
+    <div class="profile-info" id="profileViewSection">
+      <h1 class="profile-name" id="profileName">Carregando...</h1>
+      <p class="profile-email" id="profileEmail">carregando@email.com</p>
+      
+      <!-- Botão Editar Perfil -->
+      <div class="profile-actions-center" style="margin-top: 15px;">
+        <button id="editProfileBtn" class="edit-btn">
+          <svg class="pencil-icon" viewBox="0 0 24 24" width="16" height="16">
+            <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+          </svg>
+          <span>Editar perfil</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- 4. Form de Edição (Escondido por padrão) -->
+    <div id="editProfileContainer" style="display: none; padding: 20px; max-width: 320px; margin: 0 auto; text-align: left;">
+      <form id="editProfileForm" style="display: flex; flex-direction: column; gap: 12px;">
+        <div style="display: flex; flex-direction: column; gap: 4px;">
+          <label for="nameInput" style="font-size: 0.85rem; font-weight: 600;">Nome:</label>
+          <input type="text" id="nameInput" required style="padding: 8px 12px; border: 1px solid #ccc; border-radius: 6px; width: 100%; box-sizing: border-box;" />
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 4px;">
+          <label for="emailInput" style="font-size: 0.85rem; font-weight: 600;">E-mail:</label>
+          <input type="email" id="emailInput" required style="padding: 8px 12px; border: 1px solid #ccc; border-radius: 6px; width: 100%; box-sizing: border-box;" />
+        </div>
+
+        <div style="display: flex; gap: 8px; margin-top: 8px;">
+          <button type="submit" style="flex: 1; padding: 8px; background-color: #2563eb; color: #fff; border: none; border-radius: 6px; cursor: pointer;">Salvar</button>
+          <button type="button" id="cancelEditBtn" style="padding: 8px 12px; background-color: #e5e7eb; border: none; border-radius: 6px; cursor: pointer;">Cancelar</button>
+        </div>
+      </form>
+      <p id="profileMessage" style="margin-top: 10px; font-size: 0.85rem; text-align: center;"></p>
+    </div>
+
+    <!-- 5. Divisória de Seção -->
+    <div class="profile-divider"></div>
+
+    <!-- 6. Seção de Publicações -->
+    <div class="posts-section">
+      <p class="empty-posts-text">Este usuário ainda não publicou nada.</p>
+    </div>
+
+  </div>
+
+  <script type="module">
+    document.addEventListener('DOMContentLoaded', () => {
+      const savedUser = JSON.parse(localStorage.getItem('user_session'));
+
+      if (!savedUser) {
+        window.location.href = '/';
+        return;
+      }
+
+      // Elementos da interface
+      const profileViewSection = document.getElementById('profileViewSection');
+      const profileName = document.getElementById('profileName');
+      const profileEmail = document.getElementById('profileEmail');
+
+      const editProfileBtn = document.getElementById('editProfileBtn');
+      const editContainer = document.getElementById('editProfileContainer');
+      const form = document.getElementById('editProfileForm');
+      const nameInput = document.getElementById('nameInput');
+      const emailInput = document.getElementById('emailInput');
+      const cancelEditBtn = document.getElementById('cancelEditBtn');
+      const messageEl = document.getElementById('profileMessage');
+      const logoutBtn = document.getElementById('logoutBtn');
+
+      function renderUserData(user) {
+        profileName.textContent = user.name || 'Usuário Sem Nome';
+        profileEmail.textContent = user.email || 'email@exemplo.com';
+      }
+
+      renderUserData(savedUser);
+
+      // Abrir modo de edição
+      editProfileBtn.addEventListener('click', () => {
+        nameInput.value = savedUser.name || '';
+        emailInput.value = savedUser.email || '';
+        
+        profileViewSection.style.display = 'none';
+        editContainer.style.display = 'block';
+      });
+
+      // Cancelar edição
+      cancelEditBtn.addEventListener('click', () => {
+        editContainer.style.display = 'none';
+        profileViewSection.style.display = 'block';
+        messageEl.textContent = '';
+      });
+
+      // Sair da conta
+      logoutBtn.addEventListener('click', () => {
+        localStorage.removeItem('user_session');
+        window.location.href = '/';
+      });
+
+      // Enviar formulário
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const updatedData = {
+          id: savedUser.id,
+          name: nameInput.value,
+          email: emailInput.value
+        };
+
+        try {
+          const response = await fetch('/api/perfil/atualizar', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(updatedData)
+          });
+
+          const result = await response.json();
+
+          if (response.ok) {
+            const newUserSession = { ...savedUser, name: updatedData.name, email: updatedData.email };
+            localStorage.setItem('user_session', JSON.stringify(newUserSession));
+            
+            renderUserData(newUserSession);
+
+            messageEl.style.color = '#10b981';
+            messageEl.textContent = 'Perfil atualizado com sucesso!';
+            
+            setTimeout(() => {
+              editContainer.style.display = 'none';
+              profileViewSection.style.display = 'block';
+              messageEl.textContent = '';
+            }, 1200);
+          } else {
+            messageEl.style.color = '#ef4444';
+            messageEl.textContent = result.message || 'Erro ao atualizar o perfil.';
+          }
+        } catch (error) {
+          messageEl.style.color = '#ef4444';
+          messageEl.textContent = 'Erro ao conectar com o servidor.';
+        }
+      });
+    });
+  </script>
+</body>
+</html>

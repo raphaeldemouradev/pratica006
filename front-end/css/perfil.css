@@ -1,0 +1,144 @@
+/* --- ESTRUTURA GERAL DO PERFIL --- */
+.profile-card {
+  width: 100%;
+  max-width: 680px;
+  margin: 0 auto;
+  background-color: transparent;
+  box-sizing: border-box;
+}
+
+/* --- BARRA DE AÇÕES SUPERIOR (FEED / SAIR) --- */
+.profile-top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 12px;
+}
+
+.top-bar-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 1px solid currentColor;
+  color: inherit;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  opacity: 0.85;
+  transition: opacity 0.2s ease, transform 0.1s ease;
+}
+
+.top-bar-btn:hover {
+  opacity: 1;
+  transform: translateY(-1px);
+}
+
+.logout-btn {
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+/* --- BANNER COM FOTO INTEGRADA --- */
+.profile-banner {
+  position: relative;
+  height: 180px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Foto alocada internamente no canto inferior esquerdo do banner */
+.banner-avatar-container {
+  position: absolute;
+  bottom: 16px;
+  left: 20px;
+}
+
+.banner-avatar-container img {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  border: 3px solid currentColor;
+  object-fit: cover;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+/* --- INFORMAÇÕES DO USUÁRIO --- */
+.profile-info {
+  padding: 16px 20px 0 20px;
+  text-align: left;
+}
+
+.profile-name {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin: 0;
+  color: inherit;
+}
+
+.profile-email {
+  font-size: 0.95rem;
+  margin: 4px 0 0 0;
+  opacity: 0.7;
+}
+
+/* --- AÇÃO DE EDITAR PERFIL CENTRALIZADA --- */
+.profile-actions-center {
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+  padding: 0 20px;
+}
+
+.edit-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 20px;
+  border-radius: 20px;
+  border: 1px solid currentColor;
+  background-color: transparent;
+  color: inherit;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  opacity: 0.9;
+  transition: opacity 0.2s ease, transform 0.1s ease;
+}
+
+.edit-btn:hover {
+  opacity: 1;
+  transform: translateY(-1px);
+}
+
+.pencil-icon {
+  fill: currentColor;
+}
+
+/* --- LINHA DIVISÓRIA E PUBLICAÇÕES --- */
+.profile-divider {
+  height: 1px;
+  background-color: currentColor;
+  opacity: 0.15;
+  margin: 24px 0 16px 0;
+  width: 100%;
+}
+
+.posts-section {
+  padding: 24px 20px;
+  text-align: center;
+}
+
+.empty-posts-text {
+  font-size: 0.95rem;
+  opacity: 0.6;
+  margin: 0;
+}
