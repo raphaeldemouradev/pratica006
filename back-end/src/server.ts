@@ -1,22 +1,25 @@
-import express from 'express'
+import express from "express";
 import cors from 'cors';
 import path from 'node:path';
-import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
-
-import { trafficAnalyticsMiddleware, trafficLogs } from './src/middlewares/analytics.js';
-import authRouters from './src/routes/authRoutes.js'
-import { createPost, getPosts } from './src/api/posts.js';
 
 const app = express()
 app.use(cors())
 app.use(express.json());
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
-// Configuração dos caminhos (__dirname não existe em ES Modules nativos)
+// Trafego
+//import { trafficAnalyticsMiddleware, trafficLogs } from './middlewares/analytics.js';
+//import authRouters from './routes/authRoutes.js'
+//import { createPost, getPosts } from './api/posts.js';
+
+// Recriando o __dirname para ES Modules / TypeScript
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const FRONT_END_PATH = path.join(__dirname, '..', 'front-end');
+const FRONT_END_PATH = path.join(__dirname, '../../front-end');
+
+// Servir os arquivos estáticos da pasta front-end (index.html, CSS, JS)
+app.use(express.static(FRONT_END_PATH));
 
 // Cabeçalhos fundamentais de segurança
 app.use((req, res, next) => {
@@ -26,11 +29,9 @@ app.use((req, res, next) => {
 });
 
 // Middleware de Telemetria de Acessos
-app.use(trafficAnalyticsMiddleware);
+//app.use(trafficAnalyticsMiddleware);
 
-// Servir os arquivos estáticos da pasta front-end (index.html, CSS, JS)
-app.use(express.static(FRONT_END_PATH));
-
+/*
 // --- ROTAS DA API ---
 app.use('/api/auth', authRouters);
 
@@ -41,14 +42,11 @@ app.get('/api/analytics/traffic', (req, res) => {
     logs: trafficLogs
   });
 });
+*/
 
 // Rotas da API de postagens
-app.post('/api/posts', createPost);
-app.get('/api/posts', getPosts);
-
-app.listen(3000, () => {
-  console.log('Servidor rodando na porta 3000');
-});
+//app.post('/api/posts', createPost);
+//app.get('/api/posts', getPosts);
 
 // Atualizar Perfil
 app.put('/api/perfil/atualizar', async (req, res) => {
@@ -66,14 +64,14 @@ app.put('/api/perfil/atualizar', async (req, res) => {
 });
 
 ///// ROTAS /////
+// Config Home/Feed
+app.get('/', (req, res) => {
+  res.sendFile(path.join(FRONT_END_PATH, 'index.html'));
+});
+
 // Config Perfil
 app.get('/perfil', (req, res) => {
   res.sendFile(path.join(__dirname, 'perfil.html'))
-});
-
-// Redirecionar qualquer rota desconhecida diretamente para a tela inicial do front-end
-app.get('/', (req, res) => {
-  res.sendFile(path.join(FRONT_END_PATH, 'index.html'));
 });
 
 // Inicialização do servidor
