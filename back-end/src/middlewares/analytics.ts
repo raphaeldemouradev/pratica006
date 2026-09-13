@@ -1,9 +1,10 @@
+import type { NextFunction, Request, Response } from "express"
 import { anonymizeIP } from "../utils/ip.js";
 
 // Lista em memória para armazenar os logs temporariamente no teste
 export const trafficLogs = [];
 
-export function trafficAnalyticsMiddleware(req, res, next) {
+export function trafficAnalyticsMiddleware(req: Request, res: Response, next: NextFunction) {
     // Ignora requisições de arquivos estáticos como imagens, CSS ou scripts para não poluir
     if (req.url.match(/\.(css|js|png|jpg|jpeg|ico|svg)$/)) {
         return next();

@@ -1,8 +1,11 @@
 // Banco de dados temporário em memória
-let posts = [];
+import type { Request, Response } from "express";
+import type { Post } from "../types/index.js";
+
+let posts: Post[] = [];
 
 // 1. Criar Publicação (POST)
-export function createPost(req, res) {
+export function createPost(req: Request, res: Response) {
   const { userId, userName, content } = req.body;
 
   // Validação dos dados recebidos
@@ -26,6 +29,6 @@ export function createPost(req, res) {
 }
 
 // 2. Listar Publicações (GET)
-export function getPosts(req, res) {
+export function getPosts(req: Request, res: Response) {
   return res.status(200).json(posts);
 }

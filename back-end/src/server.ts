@@ -8,10 +8,9 @@ app.use(cors())
 app.use(express.json());
 const PORT = process.env.PORT || 3000;
 
-// Trafego
-//import { trafficAnalyticsMiddleware, trafficLogs } from './middlewares/analytics.js';
-//import authRouters from './routes/authRoutes.js'
-//import { createPost, getPosts } from './api/posts.js';
+import { trafficAnalyticsMiddleware, trafficLogs } from './middlewares/analytics.js';
+import authRouters from './routes/authRoutes.js'
+import { createPost, getPosts } from './api/posts.js';
 
 // Recriando o __dirname para ES Modules / TypeScript
 const __filename = fileURLToPath(import.meta.url);
@@ -28,13 +27,11 @@ app.use((req, res, next) => {
   next();
 });
 
+///// SEGURANÇA e TRAFEGO /////
 // Middleware de Telemetria de Acessos
-//app.use(trafficAnalyticsMiddleware);
+app.use(trafficAnalyticsMiddleware);
 
 /*
-// --- ROTAS DA API ---
-app.use('/api/auth', authRouters);
-
 // --- ROTA DE ESTATÍSTICAS / METRICAS ---
 app.get('/api/analytics/traffic', (req, res) => {
   res.status(200).json({
@@ -44,9 +41,15 @@ app.get('/api/analytics/traffic', (req, res) => {
 });
 */
 
+///// ROTAS DA API /////
 // Rotas da API de postagens
-//app.post('/api/posts', createPost);
-//app.get('/api/posts', getPosts);
+app.post('/api/posts', createPost);
+app.get('/api/posts', getPosts);
+
+///// CRUD /////
+// Criar e Login: "authController". 
+// "authRouter" Entrega para Front.
+app.use('/api/auth', authRouters);
 
 // Atualizar Perfil
 app.put('/api/perfil/atualizar', async (req, res) => {

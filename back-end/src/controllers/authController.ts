@@ -1,7 +1,10 @@
-// Array em memória RAM para simular o banco de dados
-const usersDatabase = [];
+import type { Request, Response } from "express";
+import type { User } from "../types/index.js"
 
-export const registerUser = async (req, res) => {
+// Array em memória RAM para simular o banco de dados
+const usersDatabase: User[] = [];
+
+export const registerUser = async (req: Request, res: Response) => {
   const { name, email, password } = req.body;
 
   // Validação simples de campos obrigatórios
@@ -34,7 +37,7 @@ export const registerUser = async (req, res) => {
   });
 };
 
-export const loginUser = async (req, res) => {
+export const loginUser = async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
@@ -57,7 +60,7 @@ export const loginUser = async (req, res) => {
 };
 
 // --- NOVO MÉTODO PARA BUSCAR DADOS DO PERFIL ---
-export const getUserById = async (req, res) => {
+export const getUserById = async (req: Request, res: Response) => {
   const { id } = req.params;
 
   const user = usersDatabase.find(u => u.id === id);
