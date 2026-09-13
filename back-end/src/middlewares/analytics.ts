@@ -1,8 +1,17 @@
 import type { NextFunction, Request, Response } from "express"
 import { anonymizeIP } from "../utils/ip.js";
 
+export interface TrafficLog {
+  id: number;
+  timestamp: string;
+  method: string;
+  route: string;
+  ip: string;
+  userAgent: string;
+}
+
 // Lista em memória para armazenar os logs temporariamente no teste
-export const trafficLogs = [];
+export const trafficLogs: TrafficLog[] = [];
 
 export function trafficAnalyticsMiddleware(req: Request, res: Response, next: NextFunction) {
     // Ignora requisições de arquivos estáticos como imagens, CSS ou scripts para não poluir
@@ -14,13 +23,13 @@ export function trafficAnalyticsMiddleware(req: Request, res: Response, next: Ne
     const rawIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
     const anonymizedIP = anonymizeIP(rawIP);
 
-    const logEntry = {
+    const logEntry: TrafficLog = {
         id: Date.now(),
-        timestamp: new Date().toISOString(), 
+        timestamp: new Date().toISOString(),
         method: req.method,
         route: req.url,
         ip: anonymizedIP,
-        userAgent: req.headers['user-agent'] || 'Desconhecido' // ?
+        userAgent: (req.headers['user-agent'] as string) || 'Desconhecido'
     };
 
     // Salva no log interno
