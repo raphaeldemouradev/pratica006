@@ -1,4 +1,4 @@
-// js/components/postModal.js
+// components/postModal.js
 
 export function initPostModal() {
   const postModalContainer = document.getElementById('post-modal-container');
