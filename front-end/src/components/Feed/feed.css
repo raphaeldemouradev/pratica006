@@ -10,21 +10,23 @@
   padding: 1rem 0;
 }
 
+/* Card Principal - Tema Dark */
 .post-card {
-  background-color: #ffffff;
-  border: 1px solid #e2e8f0;
+  background-color: #121214;
+  border: 1px solid #27272a;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
-/* Header */
+/* Header do Post */
 .post-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0.85rem 1rem;
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom: 1px solid #27272a;
+  background-color: #18181b;
 }
 
 .post-user-info {
@@ -33,11 +35,12 @@
   gap: 0.75rem;
 }
 
+/* Avatar / Placeholder do Usuário */
 .user-avatar {
   width: 38px;
   height: 38px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
   color: #ffffff;
   font-weight: 700;
   font-size: 0.95rem;
@@ -55,17 +58,18 @@
 .post-author {
   font-size: 0.9rem;
   font-weight: 600;
-  color: #0f172a;
+  color: #f4f4f5;
   line-height: 1.2;
 }
 
 .post-time {
   font-size: 0.75rem;
-  color: #94a3b8;
+  color: #71717a;
 }
 
+/* Botão Seguir */
 .btn-follow {
-  background-color: #38bdf8; /* Azul claro */
+  background-color: #2563eb;
   color: #ffffff;
   border: none;
   border-radius: 6px;
@@ -73,22 +77,27 @@
   font-size: 0.825rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
 .btn-follow:hover {
-  background-color: #0284c7;
+  background-color: #1d4ed8;
 }
 
-/* Corpo */
+.btn-follow:active {
+  transform: scale(0.96);
+}
+
+/* Corpo / Conteúdo do Post */
 .post-body {
-  padding: 1rem;
+  padding: 1.1rem;
+  background-color: #121214;
 }
 
 .post-content {
   font-size: 0.95rem;
-  line-height: 1.5;
-  color: #334155;
+  line-height: 1.6;
+  color: #e4e4e7;
   margin: 0;
   word-break: break-word;
   white-space: pre-line;
@@ -99,8 +108,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.5rem 0.75rem;
-  border-top: 1px solid #f8fafc;
+  padding: 0.6rem 0.75rem;
+  border-top: 1px solid #27272a;
+  background-color: #18181b;
 }
 
 .post-actions-left {
@@ -112,8 +122,8 @@
 .action-btn {
   background: transparent;
   border: none;
-  color: #475569;
-  padding: 0.4rem;
+  color: #a1a1aa;
+  padding: 0.45rem;
   border-radius: 50%;
   cursor: pointer;
   display: flex;
@@ -123,6 +133,6 @@
 }
 
 .action-btn:hover {
-  color: #0f172a;
-  background-color: #f1f5f9;
+  color: #38bdf8;
+  background-color: #27272a;
 }
