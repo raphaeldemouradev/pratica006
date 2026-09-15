@@ -1,4 +1,5 @@
 import { renderNavbars } from '../src/components/navbar.js';
+import { renderNavbarBottom } from '../src/components/NavbarBottom/navbarBottom.js';
 import { renderLoginModal } from '../src/components/login-modal.js';
 import { renderRegisterModal } from '../src/components/register-modal.js';
 import { renderFeed } from '../src/components/Feed/feed.js';
@@ -7,6 +8,7 @@ import { renderFeed } from '../src/components/Feed/feed.js';
 document.addEventListener('DOMContentLoaded', () => {
   // 1. Renderiza os componentes na tela
   renderNavbars();
+  renderNavbarBottom();
   renderLoginModal();
   renderRegisterModal();
   renderFeed();

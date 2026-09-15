@@ -1,0 +1,126 @@
+.search-container {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.search-header {
+  margin-bottom: 1.5rem;
+}
+
+.search-header h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #38bdf8;
+  margin-bottom: 0.5rem;
+}
+
+.search-box {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.85rem 1rem 0.85rem 2.8rem;
+  background-color: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  color: #f8fafc;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.search-input:focus {
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
+}
+
+.search-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+  font-size: 1.1rem;
+  pointer-events: none;
+}
+
+.results-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.user-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  background-color: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  transition: border-color 0.2s ease, transform 0.1s ease;
+}
+
+.user-card:hover {
+  border-color: #475569;
+  transform: translateY(-2px);
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.avatar-placeholder {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background-color: #334155;
+  color: #38bdf8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.1rem;
+  border: 1px solid #475569;
+}
+
+.user-details .user-name {
+  font-weight: 600;
+  color: #f8fafc;
+  font-size: 0.95rem;
+}
+
+.user-details .user-email {
+  font-size: 0.8rem;
+  color: #94a3b8;
+}
+
+.btn-view-profile {
+  padding: 0.45rem 0.85rem;
+  background-color: #334155;
+  color: #38bdf8;
+  border: 1px solid #475569;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.btn-view-profile:hover {
+  background-color: #38bdf8;
+  color: #0f172a;
+  border-color: #38bdf8;
+}
+
+.state-message {
+  text-align: center;
+  padding: 2.5rem 1rem;
+  color: #94a3b8;
+  font-size: 0.95rem;
+}

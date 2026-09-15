@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Buscar Usuários - Prática 006</title>
+  
+  <!-- CSS do componente UserSearch -->
+  <link rel="stylesheet" href="./src/components/UserSearch/userSearch.css">
+  
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    }
+
+    body {
+      background-color: #0f172a;
+      color: #f8fafc;
+      min-height: 100vh;
+      padding-bottom: 90px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Contêiner Obrigatório: Navbar Superior -->
+  <div id="navbar-top-container"></div>
+
+  <main class="search-container">
+    <div class="search-header">
+      <h1>Buscar Usuários</h1>
+      <p style="color: #94a3b8; font-size: 0.9rem;">Encontre pessoas cadastradas na plataforma</p>
+    </div>
+
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input 
+        type="text" 
+        id="searchInput" 
+        class="search-input" 
+        placeholder="Digite o nome do usuário..."
+        autocomplete="off"
+      />
+    </div>
+
+    <div id="resultsContainer" class="results-list">
+      <div class="state-message">Digite algo para iniciar a busca.</div>
+    </div>
+  </main>
+
+  <!-- Contêiner Obrigatório: Navbar Inferior -->
+  <div id="navbar-bottom-container"></div>
+
+  <!-- Script Principal -->
+  <script type="module">
+    import { renderNavbars } from './src/components/navbar.js';
+    import { renderNavbarBottom } from './src/components/NavbarBottom/navbarBottom.js';
+    import { initUserSearch } from './src/components/UserSearch/userSearch.js';
+
+    // 1. Renderiza as navbars
+    renderNavbars();
+    renderNavbarBottom();
+
+    // 2. Inicializa o componente de busca
+    initUserSearch();
+  </script>
+</body>
+</html>

@@ -46,6 +46,34 @@ app.get('/api/analytics/traffic', (req, res) => {
 app.post('/api/posts', createPost);
 app.get('/api/posts', getPosts);
 
+// Rota GET para buscar usuários no array
+app.get('/api/users/search', (req, res) => {
+  try {
+    const { name } = req.query;
+
+    if (!name || name.trim() === '') {
+      return res.status(200).json([]);
+    }
+
+    const searchTerm = name.toLowerCase();
+
+    // Filtra no array 'users' que está salvo na memória RAM
+    const matchedUsers = users
+      .filter((user) => user.name && user.name.toLowerCase().includes(searchTerm))
+      .map((user) => ({
+        id: user.id,
+        name: user.name,
+        email: user.email,
+      }))
+      .slice(0, 10); // Limita aos primeiros 10 resultados
+
+    return res.status(200).json(matchedUsers);
+  } catch (error) {
+    console.error('Erro ao buscar usuários:', error);
+    return res.status(500).json({ error: 'Erro interno no servidor ao buscar usuários.' });
+  }
+});
+
 ///// CRUD /////
 // Criar e Login: "authController". 
 // "authRouter" Entrega para Front.
