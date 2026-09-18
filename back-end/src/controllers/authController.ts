@@ -1,77 +1,120 @@
-import type { Request, Response } from "express";
-import type { User } from "../types/index.js"
+import type { NextFunction, Request, Response } from "express";
+import { PrismaClient } from "@prisma/client";
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
-// Array em memória RAM para simular o banco de dados
-const usersDatabase: User[] = [];
+const prisma = new PrismaClient();
+const JWT_SECRET = process.env.JWT_SECRET || 'sua_chave_secreta_aqui';
 
-export const registerUser = async (req: Request, res: Response) => {
-  const { name, email, password } = req.body;
+export class AuthController {
 
-  // Validação simples de campos obrigatórios
-  if (!name || !email || !password) {
-    return res.status(400).json({ error: 'Preencha todos os campos!' });
+  // POST /auth/register
+  public register = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const { name, email, password } = req.body;
+
+      // 1. Verifica se o usuário já existe no banco
+      const userExists = await prisma.user.findUnique({
+        where: { email },
+      });
+
+      if (userExists) {
+        res.status(400).json({ message: 'E-mail já cadastrado.' });
+        return;
+      }
+
+      // 2. Criptografa a senha
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      // 3. Cria o usuário no banco de dados via Prisma
+      const user = await prisma.user.create({
+        data: {
+          name,
+          email,
+          password: hashedPassword,
+        },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          createdAt: true,
+        },
+      });
+
+      res.status(201).json(user);
+    } catch (error) {
+      next(error);
+    }
   }
 
-  // Verifica se o usuário já existe na memória
-  const userExists = usersDatabase.find(user => user.email === email);
-  if (userExists) {
-    return res.status(400).json({ error: 'E-mail já cadastrado!' });
-  }
+  // POST /auth/login
+  public login = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const { email, password } = req.body;
 
-  // Cria o novo usuário e salva no array
-  const newUser = {
-    id: Date.now().toString(), // Gera um ID único simples
-    name,
-    email,
-    password
+      // 1. Busca o usuário pelo e-mail
+      const user = await prisma.user.findUnique({
+        where: { email },
+      });
+
+      if (!user) {
+        res.status(401).json({ message: 'Credenciais inválidas.' });
+        return;
+      }
+
+      // 2. Compara a senha fornecida com o hash salvo
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+
+      if (!isPasswordValid) {
+        res.status(401).json({ message: 'Credenciais inválidas.' });
+        return;
+      }
+
+      // 3. Gera o token JWT
+      const token = jwt.sign(
+        { id: user.id, email: user.email },
+        JWT_SECRET,
+        { expiresIn: '1d' }
+      );
+
+      // 4. Retorna o token e dados básicos (sem a senha)
+      res.status(200).json({
+        token,
+        user: {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+        },
+      });
+    } catch (error) {
+      next(error);
+    }
   };
 
-  usersDatabase.push(newUser);
+  // GET /auth/me (Rota Protegida)
+  public me = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      // Assumindo que o ID foi injetado pelo middleware de autenticação (req.userId)
+      const userId = (req as any).userId;
 
-  console.log('[RAM DB] Usuário cadastrado com sucesso:', newUser);
-  console.log('[RAM DB] Total de usuários na memória:', usersDatabase.length);
+      const user = await prisma.user.findUnique({
+        where: { id: userId },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          createdAt: true,
+        },
+      });
 
-  return res.status(201).json({
-    message: 'Usuário cadastrado com sucesso!',
-    user: { id: newUser.id, name: newUser.name, email: newUser.email }
-  });
-};
+      if (!user) {
+        res.status(404).json({ message: 'Usuário não encontrado.' });
+        return;
+      }
 
-export const loginUser = async (req: Request, res: Response) => {
-  const { email, password } = req.body;
-
-  if (!email || !password) {
-    return res.status(400).json({ error: 'E-mail e senha são obrigatórios!' });
-  }
-
-  // Busca o usuário no array em memória
-  const user = usersDatabase.find(u => u.email === email && u.password === password);
-
-  if (!user) {
-    return res.status(401).json({ error: 'E-mail ou senha incorretos!' });
-  }
-
-  console.log('[RAM DB] Usuário autenticado:', user.email);
-
-  return res.status(200).json({
-    message: 'Login realizado com sucesso!',
-    user: { id: user.id, name: user.name, email: user.email }
-  });
-};
-
-// --- NOVO MÉTODO PARA BUSCAR DADOS DO PERFIL ---
-export const getUserById = async (req: Request, res: Response) => {
-  const { id } = req.params;
-
-  const user = usersDatabase.find(u => u.id === id);
-
-  if (!user) {
-    return res.status(404).json({ error: 'Usuário não encontrado na memória RAM.' });
-  }
-
-  return res.status(200).json({
-    id: user.id,
-    name: user.name,
-    email: user.email
-  });
-};
+      res.status(200).json(user);
+    } catch (error) {
+      next(error);
+    }
+  };
+}
